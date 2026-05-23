@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      payments: {
+        Row: {
+          created_at: string | null
+          customer_email: string | null
+          id: string
+          lemon_squeezy_order_id: string | null
+          session_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email?: string | null
+          id?: string
+          lemon_squeezy_order_id?: string | null
+          session_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string | null
+          id?: string
+          lemon_squeezy_order_id?: string | null
+          session_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          app_name: string
+          background_style: string | null
+          created_at: string
+          email: string
+          generated_images: Json | null
+          id: string
+          objective: string
+          palette: Json | null
+          screenshot_ref: string | null
+          target_audience: string
+        }
+        Insert: {
+          app_name: string
+          background_style?: string | null
+          created_at?: string
+          email: string
+          generated_images?: Json | null
+          id?: string
+          objective: string
+          palette?: Json | null
+          screenshot_ref?: string | null
+          target_audience: string
+        }
+        Update: {
+          app_name?: string
+          background_style?: string | null
+          created_at?: string
+          email?: string
+          generated_images?: Json | null
+          id?: string
+          objective?: string
+          palette?: Json | null
+          screenshot_ref?: string | null
+          target_audience?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
