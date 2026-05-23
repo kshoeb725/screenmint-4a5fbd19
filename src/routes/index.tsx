@@ -104,7 +104,8 @@ function Index() {
       return;
     }
     const dataUrl = await readAsDataURL(file);
-    setPreview(dataUrl);
+    const compressed = await compressImage(dataUrl).catch(() => dataUrl);
+    setPreview(compressed);
     setResult(null);
     setPaid(false);
     setStatus("preview");
