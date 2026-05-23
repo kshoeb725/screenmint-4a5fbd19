@@ -203,6 +203,11 @@ export function PaymentDialog({
           return;
         }
 
+        if (res.setupError) {
+          setError(res.setupError);
+          return;
+        }
+
         if (!res.checkoutUrl) {
           setError("No checkout URL configured.");
           return;
