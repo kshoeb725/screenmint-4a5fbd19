@@ -2,6 +2,25 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
+const LEMON_CHECKOUT_HOSTS = new Set([
+  "app.lemonsqueezy.com",
+  "checkout.lemonsqueezy.com",
+]);
+
+function buildCheckoutUrl(rawValue: string, sessionId: string, email: string) {
+  const url = new URL(rawValue.trim());
+
+  if (!LEMON_CHECKOUT_HOSTS.has(url.hostname)) {
+    throw new Error(
+      "LEMON_SQUEEZY_CHECKOUT_URL must be a full Lemon Squeezy checkout link from your product checkout page.",
+    );
+  }
+
+  url.searchParams.set("checkout[custom][session_id]", sessionId);
+  url.searchParams.set("checkout[email]", email);
+  return url;
+}
+
 export const initPaymentSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z.object({ email: z.string().email() }).parse(input),
@@ -21,17 +40,19 @@ export const initPaymentSession = createServerFn({ method: "POST" })
     }
 
     try {
-      const normalized = /^https?:\/\//i.test(checkoutUrlRaw)
-        ? checkoutUrlRaw
-        : `https://${checkoutUrlRaw}`;
-      const url = new URL(normalized);
-      url.searchParams.set("checkout[custom][session_id]", sessionId);
-      url.searchParams.set("checkout[email]", data.email);
-      url.searchParams.set("embed", "1");
+      const url = buildCheckoutUrl(checkoutUrlRaw, sessionId, data.email);
       return { sessionId, checkoutUrl: url.toString(), demo: false };
     } catch (e) {
-      console.error("Invalid LEMON_SQUEEZY_CHECKOUT_URL, falling back to demo:", e);
-      return { sessionId, checkoutUrl: null, demo: true };
+      console.error("Invalid Lemon Squeezy checkout URL:", e);
+      return {
+        sessionId,
+        checkoutUrl: null,
+        demo: false,
+        setupError:
+          e instanceof Error
+            ? e.message
+            : "LEMON_SQUEEZY_CHECKOUT_URL is not a valid Lemon Squeezy checkout URL.",
+      };
     }
   });
 
