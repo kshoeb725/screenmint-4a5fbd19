@@ -2,64 +2,60 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-// ─── API helpers ────────────────────────────────────────────────────────────
+const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
-function getGeminiKey(): string {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error("GEMINI_API_KEY is not configured. Add it to your environment variables.");
+function getKey(): string {
+  const key = process.env.LOVABLE_API_KEY;
+  if (!key) throw new Error("LOVABLE_API_KEY is not configured.");
   return key;
 }
 
-/** Call Gemini 1.5 Flash with optional inline image for vision tasks. */
-async function geminiGenerate(
-  prompt: string,
-  imageDataUrl?: string,
-): Promise<string> {
-  const key = getGeminiKey();
-
-  const parts: unknown[] = [{ text: prompt }];
-  if (imageDataUrl) {
-    const [header, base64Data] = imageDataUrl.split(",");
-    const mimeType = header.match(/data:([^;]+)/)?.[1] ?? "image/jpeg";
-    parts.push({ inline_data: { mime_type: mimeType, data: base64Data } });
-  }
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          maxOutputTokens: 4096,
-          temperature: 0.7,
-        },
-      }),
+async function chat(body: Record<string, unknown>): Promise<any> {
+  const res = await fetch(GATEWAY_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getKey()}`,
+      "Content-Type": "application/json",
     },
-  );
-
+    body: JSON.stringify(body),
+  });
   if (!res.ok) {
     const text = await res.text();
-    if (res.status === 429) throw new Error("Gemini rate limit hit. Please retry in a moment.");
-    if (res.status === 403) throw new Error("Invalid GEMINI_API_KEY. Check your key at ai.google.dev.");
-    throw new Error(`Gemini error ${res.status}: ${text.slice(0, 300)}`);
+    if (res.status === 429) throw new Error("Rate limit hit. Please retry shortly.");
+    if (res.status === 402) throw new Error("AI credits exhausted. Add funds in Workspace settings.");
+    throw new Error(`AI gateway error ${res.status}: ${text.slice(0, 300)}`);
   }
-
-  const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  return res.json();
 }
 
-/** Generate an image via Pollinations.ai — free, no key needed. Returns a URL. */
-async function pollinationsImage(prompt: string): Promise<string> {
-  const seed = Math.floor(Math.random() * 999_999);
-  const url =
-    `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}` +
-    `?width=1600&height=1200&nologo=true&model=flux&seed=${seed}&enhance=true`;
-  // Pollinations generates on-demand at the URL — just validate it loads
-  const check = await fetch(url, { method: "HEAD" });
-  if (!check.ok) throw new Error(`Pollinations image generation failed (${check.status})`);
+// ─── Vision analysis (Gemini flash) ──────────────────────────────────────────
+
+async function analyzeImage(prompt: string, imageDataUrl: string): Promise<string> {
+  const data = await chat({
+    model: "google/gemini-2.5-flash",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageDataUrl } },
+        ],
+      },
+    ],
+  });
+  return data?.choices?.[0]?.message?.content ?? "";
+}
+
+// ─── Image generation (Nano Banana) ──────────────────────────────────────────
+
+async function generateImage(prompt: string): Promise<string> {
+  const data = await chat({
+    model: "google/gemini-2.5-flash-image",
+    messages: [{ role: "user", content: prompt }],
+    modalities: ["image", "text"],
+  });
+  const url = data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+  if (!url) throw new Error("Image generation returned no image.");
   return url;
 }
 
@@ -114,11 +110,11 @@ async function analyze(
 
   const prompt = `You are a Shopify App Store marketing expert. Analyze this screenshot of a Shopify merchant app and create a marketing plan for 3 promotional images.
 
-App details (treat as ground truth):
+App details (ground truth):
 - App name: ${ctx.appName}
 - Target audience: ${ctx.targetAudience}
 - Main objective: ${ctx.objective}
-- Brand colors extracted from screenshot: ${paletteLine}
+- Brand colors: ${paletteLine}
 - Background style: ${ctx.backgroundStyle || "clean modern"}
 
 Return ONLY valid JSON (no markdown, no prose) with this exact shape:
@@ -127,28 +123,13 @@ Return ONLY valid JSON (no markdown, no prose) with this exact shape:
   "category": "one-word Shopify app category",
   "primaryBenefit": "compelling 8-12 word benefit statement",
   "shots": [
-    {
-      "headline": "bold 4-8 word headline for promo shot 1",
-      "subhead": "10-16 word supporting line",
-      "caption": "marketing caption under 90 chars mentioning ${ctx.targetAudience}",
-      "imagePrompt": "detailed text-to-image prompt for a professional Shopify App Store promo image (1600x1200px, 4:3). The image should: show a clean device mockup (laptop or phone) displaying a UI dashboard for a Shopify app called '${ctx.appName}', surrounded by floating UI elements, annotation callouts, and stats relevant to '${ctx.objective}'. Use a branded background with colors ${paletteLine} in a ${ctx.backgroundStyle || 'clean modern'} style. Include large bold headline text '${ctx.appName}' at the top. Premium editorial feel, generous whitespace, professional marketing quality. NO watermarks, NO lorem ipsum."
-    },
-    {
-      "headline": "bold 4-8 word headline for promo shot 2",
-      "subhead": "10-16 word supporting line",
-      "caption": "marketing caption under 90 chars",
-      "imagePrompt": "detailed text-to-image prompt describing shot 2 as a feature-callout promo (1600x1200px). Show the Shopify app '${ctx.appName}' UI with annotation pills and arrows highlighting 2-3 key features relevant to '${ctx.targetAudience}'. Background uses palette ${paletteLine}. Clean SaaS product screenshot style, annotation bubbles in accent color, professional typography."
-    },
-    {
-      "headline": "bold 4-8 word headline for promo shot 3",
-      "subhead": "10-16 word supporting line",
-      "caption": "marketing caption under 90 chars",
-      "imagePrompt": "detailed text-to-image prompt for shot 3 as a social-proof/results promo (1600x1200px). Show the Shopify app '${ctx.appName}' alongside a large stat card (e.g. '+47% conversion') and a merchant testimonial quote badge. Background uses palette ${paletteLine}. Modern data visualization aesthetic, trust-building design, professional."
-    }
+    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "detailed text-to-image prompt for a Shopify App Store hero promo image, 1600x1200, 4:3, device mockup of ${ctx.appName} with the headline overlay, palette ${paletteLine}, ${ctx.backgroundStyle || "clean modern"} background" },
+    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "feature-callout promo for ${ctx.appName}, annotation pills, palette ${paletteLine}" },
+    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "social-proof/results promo for ${ctx.appName} with a big stat card and merchant testimonial, palette ${paletteLine}" }
   ]
 }`;
 
-  const raw = await geminiGenerate(prompt, imageDataUrl);
+  const raw = await analyzeImage(prompt, imageDataUrl);
   const cleaned = extractJSON(raw);
   let parsed: AnalysisPlan;
   try {
@@ -177,12 +158,12 @@ async function renderShot(
 
   const fullPrompt =
     `${imagePrompt}. ` +
-    `Composition: 1600x1200px, 4:3 aspect ratio, Shopify App Store promotional image. ` +
+    `Composition: 1600x1200px, 4:3 aspect ratio, professional Shopify App Store promotional image. ` +
     `Background color: ${bg}, palette: ${paletteList}, style: ${backgroundStyle || "clean modern"}. ` +
     `Overlay headline text: "${headline}". Supporting text: "${subhead}". ` +
-    `Accent color: ${accent}. Ultra high quality, professional marketing graphic, no watermarks.`;
+    `Accent color: ${accent}. Ultra high quality, professional marketing graphic, no watermarks, no lorem ipsum.`;
 
-  return pollinationsImage(fullPrompt);
+  return generateImage(fullPrompt);
 }
 
 // ─── Server function ─────────────────────────────────────────────────────────
@@ -214,9 +195,8 @@ export const generatePromos = createServerFn({ method: "POST" })
       error: typeof images[i] === "string" ? null : (images[i] as { error: string }).error,
     }));
 
-    // Persist submission (best-effort)
     try {
-      const generated = shots.filter((s) => s.image).map((s) => s.image);
+      const generated = shots.filter((s) => s.image).map((s) => s.image as string);
       await supabaseAdmin.from("submissions").insert({
         email: data.email,
         app_name: data.appName,

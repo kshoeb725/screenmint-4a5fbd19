@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      payments: {
+        Row: {
+          created_at: string | null
+          customer_email: string | null
+          id: string
+          lemon_squeezy_order_id: string | null
+          session_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email?: string | null
+          id?: string
+          lemon_squeezy_order_id?: string | null
+          session_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string | null
+          id?: string
+          lemon_squeezy_order_id?: string | null
+          session_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           app_name: string
