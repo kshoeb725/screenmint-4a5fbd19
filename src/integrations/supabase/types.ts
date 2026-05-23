@@ -14,45 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      submissions: {
-        Row: {
-          app_name: string
-          background_style: string | null
-          created_at: string
-          email: string
-          generated_images: Json | null
-          id: string
-          objective: string
-          palette: Json | null
-          screenshot_ref: string | null
-          target_audience: string
-        }
-        Insert: {
-          app_name: string
-          background_style?: string | null
-          created_at?: string
-          email: string
-          generated_images?: Json | null
-          id?: string
-          objective: string
-          palette?: Json | null
-          screenshot_ref?: string | null
-          target_audience: string
-        }
-        Update: {
-          app_name?: string
-          background_style?: string | null
-          created_at?: string
-          email?: string
-          generated_images?: Json | null
-          id?: string
-          objective?: string
-          palette?: Json | null
-          screenshot_ref?: string | null
-          target_audience?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
