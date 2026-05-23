@@ -2,15 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-const LEMON_CHECKOUT_HOSTS = new Set([
-  "app.lemonsqueezy.com",
-  "checkout.lemonsqueezy.com",
-]);
-
 function buildCheckoutUrl(rawValue: string, sessionId: string, email: string) {
-  const url = new URL(rawValue.trim());
+  const trimmed = rawValue.trim();
+  const normalized = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  const url = new URL(normalized);
 
-  if (!LEMON_CHECKOUT_HOSTS.has(url.hostname)) {
+  if (!url.hostname.endsWith(".lemonsqueezy.com") || !url.pathname.includes("/checkout")) {
     throw new Error(
       "LEMON_SQUEEZY_CHECKOUT_URL must be a full Lemon Squeezy checkout link from your product checkout page.",
     );
