@@ -2,6 +2,22 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
+function buildCheckoutUrl(rawValue: string, sessionId: string, email: string) {
+  const trimmed = rawValue.trim();
+  const normalized = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  const url = new URL(normalized);
+
+  if (!url.hostname.endsWith(".lemonsqueezy.com") || !url.pathname.includes("/checkout")) {
+    throw new Error(
+      "LEMON_SQUEEZY_CHECKOUT_URL must be a full Lemon Squeezy checkout link from your product checkout page.",
+    );
+  }
+
+  url.searchParams.set("checkout[custom][session_id]", sessionId);
+  url.searchParams.set("checkout[email]", email);
+  return url;
+}
+
 export const initPaymentSession = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z.object({ email: z.string().email() }).parse(input),
@@ -17,21 +33,23 @@ export const initPaymentSession = createServerFn({ method: "POST" })
 
     const checkoutUrlRaw = process.env.LEMON_SQUEEZY_CHECKOUT_URL?.trim();
     if (!checkoutUrlRaw) {
-      return { sessionId, checkoutUrl: null, demo: true };
+      return { sessionId, checkoutUrl: null, demo: true, setupError: null };
     }
 
     try {
-      const normalized = /^https?:\/\//i.test(checkoutUrlRaw)
-        ? checkoutUrlRaw
-        : `https://${checkoutUrlRaw}`;
-      const url = new URL(normalized);
-      url.searchParams.set("checkout[custom][session_id]", sessionId);
-      url.searchParams.set("checkout[email]", data.email);
-      url.searchParams.set("embed", "1");
-      return { sessionId, checkoutUrl: url.toString(), demo: false };
+      const url = buildCheckoutUrl(checkoutUrlRaw, sessionId, data.email);
+      return { sessionId, checkoutUrl: url.toString(), demo: false, setupError: null };
     } catch (e) {
-      console.error("Invalid LEMON_SQUEEZY_CHECKOUT_URL, falling back to demo:", e);
-      return { sessionId, checkoutUrl: null, demo: true };
+      console.error("Invalid Lemon Squeezy checkout URL:", e);
+      return {
+        sessionId,
+        checkoutUrl: null,
+        demo: false,
+        setupError:
+          e instanceof Error
+            ? e.message
+            : "LEMON_SQUEEZY_CHECKOUT_URL is not a valid Lemon Squeezy checkout URL.",
+      };
     }
   });
 
