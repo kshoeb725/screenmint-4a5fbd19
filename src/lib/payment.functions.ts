@@ -36,12 +36,12 @@ export const initPaymentSession = createServerFn({ method: "POST" })
 
     const checkoutUrlRaw = process.env.LEMON_SQUEEZY_CHECKOUT_URL?.trim();
     if (!checkoutUrlRaw) {
-      return { sessionId, checkoutUrl: null, demo: true };
+      return { sessionId, checkoutUrl: null, demo: true, setupError: null };
     }
 
     try {
       const url = buildCheckoutUrl(checkoutUrlRaw, sessionId, data.email);
-      return { sessionId, checkoutUrl: url.toString(), demo: false };
+      return { sessionId, checkoutUrl: url.toString(), demo: false, setupError: null };
     } catch (e) {
       console.error("Invalid Lemon Squeezy checkout URL:", e);
       return {
