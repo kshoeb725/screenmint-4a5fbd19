@@ -15,17 +15,24 @@ export const initPaymentSession = createServerFn({ method: "POST" })
       customer_email: data.email,
     });
 
-    const checkoutUrl = process.env.LEMON_SQUEEZY_CHECKOUT_URL;
-    if (!checkoutUrl) {
+    const checkoutUrlRaw = process.env.LEMON_SQUEEZY_CHECKOUT_URL?.trim();
+    if (!checkoutUrlRaw) {
       return { sessionId, checkoutUrl: null, demo: true };
     }
 
-    const url = new URL(checkoutUrl);
-    url.searchParams.set("checkout[custom][session_id]", sessionId);
-    url.searchParams.set("checkout[email]", data.email);
-    url.searchParams.set("embed", "1");
-
-    return { sessionId, checkoutUrl: url.toString(), demo: false };
+    try {
+      const normalized = /^https?:\/\//i.test(checkoutUrlRaw)
+        ? checkoutUrlRaw
+        : `https://${checkoutUrlRaw}`;
+      const url = new URL(normalized);
+      url.searchParams.set("checkout[custom][session_id]", sessionId);
+      url.searchParams.set("checkout[email]", data.email);
+      url.searchParams.set("embed", "1");
+      return { sessionId, checkoutUrl: url.toString(), demo: false };
+    } catch (e) {
+      console.error("Invalid LEMON_SQUEEZY_CHECKOUT_URL, falling back to demo:", e);
+      return { sessionId, checkoutUrl: null, demo: true };
+    }
   });
 
 export const getPaymentStatus = createServerFn({ method: "POST" })
