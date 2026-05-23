@@ -208,15 +208,26 @@ export function PaymentDialog({
           return;
         }
 
-        // Open Lemon Squeezy overlay
-        if (window.LemonSqueezy?.Url?.Open) {
-          window.LemonSqueezy.Url.Open(res.checkoutUrl);
-        } else {
-          // Fallback: open in new tab if embed script hasn't loaded
-          window.open(res.checkoutUrl, "_blank", "noopener,noreferrer");
+        // Ensure Lemon Squeezy embed script is initialized
+        if (typeof window.createLemonSqueezy === "function" && !window.LemonSqueezy) {
+          try { window.createLemonSqueezy(); } catch {}
         }
 
+        // Try overlay first
+        if (window.LemonSqueezy?.Url?.Open) {
+          try {
+            window.LemonSqueezy.Url.Open(res.checkoutUrl);
+            startPolling(res.sessionId);
+            return;
+          } catch (err) {
+            console.error("Lemon Squeezy overlay failed, falling back to redirect:", err);
+          }
+        }
+
+        // Reliable fallback: full-page redirect (no popup blocker)
         startPolling(res.sessionId);
+        window.location.href = res.checkoutUrl;
+
       })
       .catch((e) =>
         setError(
