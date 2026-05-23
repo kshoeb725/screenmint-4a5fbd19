@@ -33,6 +33,32 @@ function readAsDataURL(file: File): Promise<string> {
   });
 }
 
+// Downscale + recompress so the base64 payload stays small enough for the
+// server-fn RPC body (preview proxy fails on multi-MB JSON bodies).
+async function compressImage(dataUrl: string, maxDim = 1280, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(dataUrl);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      } catch (err) {
+        reject(err);
+      }
+    };
+    img.onerror = () => reject(new Error("Failed to load image for compression"));
+    img.src = dataUrl;
+  });
+}
+
 async function downloadAsZip(shots: Result["shots"]) {
   const zip = new JSZip();
   const folder = zip.folder("screenmint-promos")!;
