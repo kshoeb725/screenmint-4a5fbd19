@@ -555,10 +555,43 @@ function ShotCard({
   index: number;
   paid: boolean;
 }) {
+  const [fullscreen, setFullscreen] = useState(false);
+
   const copyCaption = async () => {
     await navigator.clipboard.writeText(shot.caption);
     toast.success("Caption copied");
   };
+
+  const Watermark = () =>
+    !paid ? (
+      <div
+        className="absolute inset-0 pointer-events-none select-none overflow-hidden"
+        aria-hidden
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
+        <div
+          className="absolute inset-0 flex flex-col justify-around"
+          style={{ padding: "8px 0" }}
+        >
+          {Array.from({ length: 6 }).map((_, row) => (
+            <div
+              key={row}
+              className="flex justify-around items-center"
+              style={{ transform: `rotate(-25deg) scaleX(1.3)` }}
+            >
+              {Array.from({ length: 4 }).map((_, col) => (
+                <span
+                  key={col}
+                  className="font-mono text-[10px] font-bold tracking-widest uppercase whitespace-nowrap opacity-40 text-white"
+                >
+                  ScreenMint · Preview
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : null;
 
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden">
@@ -571,38 +604,7 @@ function ShotCard({
               className="w-full h-full object-cover transition group-hover:scale-[1.02] select-none pointer-events-none"
               draggable={false}
             />
-            {/* Watermark overlay — shown until paid */}
-            {!paid && (
-              <div
-                className="absolute inset-0 pointer-events-none select-none overflow-hidden"
-                aria-hidden
-              >
-                {/* Dark vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
-                {/* Tiled watermark text */}
-                <div
-                  className="absolute inset-0 flex flex-col justify-around"
-                  style={{ padding: "8px 0" }}
-                >
-                  {Array.from({ length: 5 }).map((_, row) => (
-                    <div
-                      key={row}
-                      className="flex justify-around items-center"
-                      style={{ transform: `rotate(-25deg) scaleX(1.3)` }}
-                    >
-                      {Array.from({ length: 4 }).map((_, col) => (
-                        <span
-                          key={col}
-                          className="font-mono text-[9px] font-bold tracking-widest uppercase whitespace-nowrap opacity-40 text-white"
-                        >
-                          APP SHORTS · PREVIEW
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <Watermark />
           </>
         ) : (
           <div className="absolute inset-0 grid place-items-center text-destructive text-sm p-4 text-center">
@@ -612,6 +614,17 @@ function ShotCard({
         <div className="absolute top-3 left-3 font-mono text-[10px] tracking-widest bg-ink/70 text-cream px-2 py-1 rounded">
           SHOT {String(index + 1).padStart(2, "0")}
         </div>
+        {shot.image && (
+          <button
+            type="button"
+            onClick={() => setFullscreen(true)}
+            className="absolute bottom-3 right-3 z-10 font-mono text-[10px] tracking-widest bg-ink/80 hover:bg-ink text-cream px-2.5 py-1.5 rounded flex items-center gap-1.5 transition"
+            aria-label="View fullscreen"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V3h4M21 7V3h-4M3 17v4h4M21 17v4h-4"/></svg>
+            FULLSCREEN
+          </button>
+        )}
         {paid && shot.image && (
           <div className="absolute top-3 right-3 font-mono text-[10px] tracking-widest bg-lime text-ink px-2 py-1 rounded font-bold">
             UNLOCKED
@@ -623,6 +636,34 @@ function ShotCard({
           </div>
         )}
       </div>
+
+      {fullscreen && shot.image && (
+        <div
+          className="fixed inset-0 z-[100] bg-ink/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
+          onClick={() => setFullscreen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setFullscreen(false)}
+            className="absolute top-4 right-4 font-mono text-xs tracking-widest bg-cream/10 hover:bg-cream/20 text-cream px-3 py-2 rounded-full transition"
+            aria-label="Close fullscreen"
+          >
+            ✕ CLOSE
+          </button>
+          <div
+            className="relative max-w-6xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={shot.image}
+              alt={shot.headline}
+              className="w-full h-auto max-h-[85vh] object-contain rounded-lg select-none pointer-events-none mx-auto"
+              draggable={false}
+            />
+            <Watermark />
+          </div>
+        </div>
+      )}
       <div className="p-5 flex flex-col gap-3 flex-1">
         <h3 className="font-display text-2xl leading-tight">{shot.headline}</h3>
         <p className="text-sm text-muted-foreground">{shot.subhead}</p>
