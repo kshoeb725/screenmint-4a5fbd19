@@ -7,15 +7,27 @@ function buildCheckoutUrl(rawValue: string, sessionId: string, email: string) {
   const normalized = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   const url = new URL(normalized);
 
-  if (!url.hostname.endsWith(".lemonsqueezy.com") || !url.pathname.includes("/checkout")) {
+  if (!url.hostname.endsWith(".lemonsqueezy.com") || !url.pathname.startsWith("/checkout/buy/")) {
     throw new Error(
-      "LEMON_SQUEEZY_CHECKOUT_URL must be a full Lemon Squeezy checkout link from your product checkout page.",
+      "LEMON_SQUEEZY_CHECKOUT_URL must be a shareable Lemon Squeezy checkout link like https://your-store.lemonsqueezy.com/checkout/buy/VARIANT_ID.",
     );
   }
 
   url.searchParams.set("checkout[custom][session_id]", sessionId);
   url.searchParams.set("checkout[email]", email);
   return url;
+}
+
+async function assertCheckoutIsReachable(url: URL) {
+  const response = await fetch(url.toString(), { method: "GET", redirect: "manual" });
+  if (response.status === 404) {
+    throw new Error(
+      "The configured Lemon Squeezy checkout link returns 404. Copy a fresh Share → Hosted checkout link for the active product variant and update LEMON_SQUEEZY_CHECKOUT_URL.",
+    );
+  }
+  if (response.status >= 400) {
+    throw new Error(`Lemon Squeezy checkout is not reachable right now (${response.status}).`);
+  }
 }
 
 export const initPaymentSession = createServerFn({ method: "POST" })
@@ -38,6 +50,7 @@ export const initPaymentSession = createServerFn({ method: "POST" })
 
     try {
       const url = buildCheckoutUrl(checkoutUrlRaw, sessionId, data.email);
+      await assertCheckoutIsReachable(url);
       return { sessionId, checkoutUrl: url.toString(), demo: false, setupError: null };
     } catch (e) {
       console.error("Invalid Lemon Squeezy checkout URL:", e);
