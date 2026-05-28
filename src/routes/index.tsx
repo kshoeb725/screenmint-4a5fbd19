@@ -6,7 +6,9 @@ import JSZip from "jszip";
 import { generatePromos } from "@/lib/generate.functions";
 import { useTheme } from "@/hooks/use-theme";
 import { PaymentDialog } from "@/components/PaymentDialog";
+import { Footer } from "@/components/Footer";
 import { extractFromDataUrl } from "@/lib/extract-palette";
+
 
 type FormData = {
   email: string;
@@ -757,7 +759,7 @@ const FAQ_ITEMS = [
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="mx-auto max-w-3xl px-6 py-20">
+    <section id="faq" className="mx-auto max-w-3xl px-6 py-20">
       <div className="text-center mb-12">
         <p className="font-mono text-xs tracking-widest text-lime uppercase mb-3">Got questions?</p>
         <h2 className="font-display text-4xl md:text-5xl">Frequently asked</h2>
@@ -788,16 +790,5 @@ function FAQ() {
         ))}
       </div>
     </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-10 flex flex-wrap justify-between gap-4 text-sm text-muted-foreground">
-        <div className="font-mono">© ScreenMint · MVP</div>
-        <div className="font-mono">Built for Shopify app developers</div>
-      </div>
-    </footer>
   );
 }
