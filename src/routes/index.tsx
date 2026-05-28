@@ -754,12 +754,10 @@ const FAQ_ITEMS = [
     q: "Does this work for any Shopify app?",
     a: "Yes — whether you're building a reviews app, a shipping tool, a loyalty program, or anything else. Just describe your target audience and objective and the AI tailors the images accordingly.",
   },
-];
-
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="mx-auto max-w-3xl px-6 py-20">
+    <section id="faq" className="mx-auto max-w-3xl px-6 py-20">
       <div className="text-center mb-12">
         <p className="font-mono text-xs tracking-widest text-lime uppercase mb-3">Got questions?</p>
         <h2 className="font-display text-4xl md:text-5xl">Frequently asked</h2>
@@ -790,6 +788,8 @@ function FAQ() {
         ))}
       </div>
     </section>
+  );
+}
   );
 }
 
