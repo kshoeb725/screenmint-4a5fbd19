@@ -6,7 +6,9 @@ import JSZip from "jszip";
 import { generatePromos } from "@/lib/generate.functions";
 import { useTheme } from "@/hooks/use-theme";
 import { PaymentDialog } from "@/components/PaymentDialog";
+import { Footer } from "@/components/Footer";
 import { extractFromDataUrl } from "@/lib/extract-palette";
+
 
 type FormData = {
   email: string;
