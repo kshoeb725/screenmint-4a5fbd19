@@ -751,11 +751,12 @@ const FAQ_ITEMS = [
     a: "Your screenshot is only used during the generation process. Only a short reference snippet is saved to our database for analytics — the full image is never permanently stored.",
   },
   {
-  {
     q: "Does this work for any Shopify app?",
     a: "Yes — whether you're building a reviews app, a shipping tool, a loyalty program, or anything else. Just describe your target audience and objective and the AI tailors the images accordingly.",
   },
 ];
+
+function FAQ() {
 
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
