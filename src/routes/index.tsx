@@ -757,7 +757,6 @@ const FAQ_ITEMS = [
 ];
 
 function FAQ() {
-
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   return (
