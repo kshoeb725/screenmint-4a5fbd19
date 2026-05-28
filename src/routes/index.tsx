@@ -757,7 +757,6 @@ const FAQ_ITEMS = [
 ];
 
 function FAQ() {
-function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <section id="faq" className="mx-auto max-w-3xl px-6 py-20">
