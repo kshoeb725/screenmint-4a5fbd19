@@ -790,16 +790,4 @@ function FAQ() {
     </section>
   );
 }
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-10 flex flex-wrap justify-between gap-4 text-sm text-muted-foreground">
-        <div className="font-mono">© ScreenMint · MVP</div>
-        <div className="font-mono">Built for Shopify app developers</div>
-      </div>
-    </footer>
-  );
 }
