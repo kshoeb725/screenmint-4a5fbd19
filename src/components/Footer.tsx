@@ -139,14 +139,18 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Screenify. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <Link to="/terms" className="transition-colors hover:text-foreground">
-              Terms & Conditions
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+            <Link to="/privacy" className="transition-colors hover:text-foreground">
+              Privacy
             </Link>
             <span className="text-border">|</span>
-            <a href="mailto:Screenify786@gmail.com" className="transition-colors hover:text-foreground">
-              Contact
-            </a>
+            <Link to="/terms" className="transition-colors hover:text-foreground">
+              Terms
+            </Link>
+            <span className="text-border">|</span>
+            <Link to="/refunds" className="transition-colors hover:text-foreground">
+              Refunds
+            </Link>
           </div>
         </div>
       </div>
