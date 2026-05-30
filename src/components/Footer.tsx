@@ -84,7 +84,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@screenmint.app"
+                  href="mailto:Screenify786@gmail.com"
                   className="transition-colors hover:text-foreground"
                 >
                   Support
@@ -101,15 +101,15 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="mailto:hello@screenmint.app"
+                  href="mailto:Screenify786@gmail.com"
                   className="transition-colors hover:text-foreground"
                 >
-                  hello@screenmint.app
+                  Screenify786@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3 pt-1">
                 <a
-                  href="https://twitter.com/screenmint"
+                  href="https://x.com/as6379301"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center rounded-full border border-border p-2 transition hover:bg-muted hover:text-foreground"
@@ -120,14 +120,14 @@ export function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://github.com/screenmint"
+                  href="https://www.reddit.com/u/AdilShaikh5786/s/j8JQeoj6aB"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center rounded-full border border-border p-2 transition hover:bg-muted hover:text-foreground"
-                  aria-label="GitHub"
+                  aria-label="Reddit"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286A.72.72 0 0 0 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 12.683a1.61 1.61 0 0 1 .536 1.196c0 2.394-2.787 4.336-6.225 4.336s-6.225-1.942-6.225-4.336a1.61 1.61 0 0 1 .536-1.196 1.617 1.617 0 1 1 2.156-2.398c1.057-.715 2.503-1.174 4.108-1.221l.78-3.673a.341.341 0 0 1 .405-.262l2.585.55a1.165 1.165 0 1 1-.114.536l-2.318-.493-.701 3.302c1.583.06 3.006.518 4.052 1.227a1.617 1.617 0 1 1 2.156 2.398l-.032-.166ZM9.075 13.823a1.165 1.165 0 1 0 0-2.33 1.165 1.165 0 0 0 0 2.33Zm6.225-1.165a1.165 1.165 0 1 0-2.33 0 1.165 1.165 0 0 0 2.33 0Zm-.954 2.581a.341.341 0 0 0-.482 0c-.476.475-1.495.516-1.864.516s-1.388-.041-1.864-.516a.341.341 0 1 0-.482.482c.6.6 1.747.65 2.346.65.6 0 1.747-.05 2.346-.65a.341.341 0 0 0 0-.482Z" />
                   </svg>
                 </a>
               </li>
@@ -144,7 +144,7 @@ export function Footer() {
               Terms & Conditions
             </Link>
             <span className="text-border">|</span>
-            <a href="mailto:hello@screenmint.app" className="transition-colors hover:text-foreground">
+            <a href="mailto:Screenify786@gmail.com" className="transition-colors hover:text-foreground">
               Contact
             </a>
           </div>
