@@ -214,11 +214,11 @@ function Nav() {
       <div className="flex items-center gap-2.5">
         <img
           src="/screenmint-icon.png"
-          alt="ScreenMint icon"
+          alt="Screenify icon"
           className="h-14 w-14 rounded-2xl object-cover"
         />
         <span className="font-display text-2xl tracking-tight">
-          Screen<span className="text-[#3ECFB2]">Mint</span>
+          Screen<span className="text-[#3ECFB2]">ify</span>
         </span>
       </div>
       <div className="flex items-center gap-3 text-sm text-muted-foreground font-mono">
@@ -613,7 +613,7 @@ function ShotCard({
                   key={col}
                   className="font-mono text-[10px] font-bold tracking-widest uppercase whitespace-nowrap opacity-40 text-white"
                 >
-                  ScreenMint · Preview
+                  Screenify · Preview
                 </span>
               ))}
             </div>
@@ -715,8 +715,8 @@ function ShotCard({
 
 const FAQ_ITEMS = [
   {
-    q: "What exactly does ScreenMint do?",
-    a: "You upload one screenshot of your Shopify app, fill in a few details, and ScreenMint generates 3 ready-to-use promo images sized perfectly for the Shopify App Store (1600×1200). No design skills needed.",
+    q: "What exactly does Screenify do?",
+    a: "You upload one screenshot of your Shopify app, fill in a few details, and Screenify generates 3 ready-to-use promo images sized perfectly for the Shopify App Store (1600×1200). No design skills needed.",
   },
   {
     q: "Do I need any design experience?",
@@ -740,7 +740,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Will the images match my app's branding?",
-    a: "ScreenMint automatically extracts your app's dominant colors from the screenshot and uses them as the palette. The AI also uses your app name, target audience, and goal to write relevant headlines and copy.",
+    a: "Screenify automatically extracts your app's dominant colors from the screenshot and uses them as the palette. The AI also uses your app name, target audience, and goal to write relevant headlines and copy.",
   },
   {
     q: "What if I don't like one of the generated images?",

@@ -8,11 +8,11 @@ function TermsPage() {
   const sections = [
     {
       title: "1. Introduction",
-      content: `Welcome to ScreenMint ("we", "our", or "us"). These Terms and Conditions ("Terms") govern your access to and use of the ScreenMint website and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.`,
+      content: `Welcome to Screenify ("we", "our", or "us"). These Terms and Conditions ("Terms") govern your access to and use of the Screenify website and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.`,
     },
     {
       title: "2. Description of Service",
-      content: `ScreenMint is an AI-powered tool that generates promotional images for Shopify App Store listings. Users upload screenshots and provide app details, and our service generates up to three polished, store-ready promo images.`,
+      content: `Screenify is an AI-powered tool that generates promotional images for Shopify App Store listings. Users upload screenshots and provide app details, and our service generates up to three polished, store-ready promo images.`,
     },
     {
       title: "3. Eligibility",
@@ -24,7 +24,7 @@ function TermsPage() {
     },
     {
       title: "5. Payment and Refunds",
-      content: `ScreenMint charges a one-time fee per generation to unlock and download full-resolution promo images. All payments are processed securely via Lemon Squeezy. Due to the digital nature of the product, all sales are final once the images have been generated and unlocked. If you experience technical issues, please contact us at hello@screenmint.app.`,
+      content: `Screenify charges a one-time fee per generation to unlock and download full-resolution promo images. All payments are processed securely via Lemon Squeezy. Due to the digital nature of the product, all sales are final once the images have been generated and unlocked. If you experience technical issues, please contact us at hello@screenmint.app.`,
     },
     {
       title: "6. User Content",
@@ -36,7 +36,7 @@ function TermsPage() {
     },
     {
       title: "8. Intellectual Property",
-      content: `The Service, its original content (excluding User Content), features, and functionality are and will remain the exclusive property of ScreenMint and its licensors. The generated promo images are provided to you under a personal, non-exclusive license for use in your Shopify App Store listing. You may not resell, redistribute, or sublicense the generated images without our prior written consent.`,
+      content: `The Service, its original content (excluding User Content), features, and functionality are and will remain the exclusive property of Screenify and its licensors. The generated promo images are provided to you under a personal, non-exclusive license for use in your Shopify App Store listing. You may not resell, redistribute, or sublicense the generated images without our prior written consent.`,
     },
     {
       title: "9. Disclaimer of Warranties",
@@ -44,11 +44,11 @@ function TermsPage() {
     },
     {
       title: "10. Limitation of Liability",
-      content: `To the maximum extent permitted by law, ScreenMint shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill, arising out of or in connection with your use of the Service, even if we have been advised of the possibility of such damages.`,
+      content: `To the maximum extent permitted by law, Screenify shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill, arising out of or in connection with your use of the Service, even if we have been advised of the possibility of such damages.`,
     },
     {
       title: "11. Indemnification",
-      content: `You agree to indemnify and hold harmless ScreenMint and its affiliates, officers, agents, and employees from any claim or demand, including reasonable attorneys' fees, made by any third party due to or arising out of your use of the Service, your violation of these Terms, or your violation of any rights of another.`,
+      content: `You agree to indemnify and hold harmless Screenify and its affiliates, officers, agents, and employees from any claim or demand, including reasonable attorneys' fees, made by any third party due to or arising out of your use of the Service, your violation of these Terms, or your violation of any rights of another.`,
     },
     {
       title: "12. Termination",
@@ -56,7 +56,7 @@ function TermsPage() {
     },
     {
       title: "13. Governing Law",
-      content: `These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which ScreenMint operates, without regard to its conflict of law provisions.`,
+      content: `These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Screenify operates, without regard to its conflict of law provisions.`,
     },
     {
       title: "14. Changes to Terms",
@@ -128,7 +128,7 @@ function TermsPage() {
       {/* Simple footer for terms page */}
       <footer className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-8 flex flex-wrap justify-between gap-4 text-xs text-muted-foreground">
-          <span>&copy; {new Date().getFullYear()} ScreenMint</span>
+          <span>&copy; {new Date().getFullYear()} Screenify</span>
           <Link to="/" className="transition-colors hover:text-foreground">
             Back to Home
           </Link>
