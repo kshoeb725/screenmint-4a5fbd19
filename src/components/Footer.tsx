@@ -10,11 +10,11 @@ export function Footer() {
             <div className="flex items-center gap-2.5">
               <img
                 src="/screenmint-icon.png"
-                alt="ScreenMint icon"
+                alt="Screenify icon"
                 className="h-10 w-10 rounded-xl object-cover"
               />
               <span className="font-display text-xl tracking-tight">
-                Screen<span className="text-lime">Mint</span>
+                Screen<span className="text-lime">ify</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -137,7 +137,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} ScreenMint. All rights reserved.
+            &copy; {new Date().getFullYear()} Screenify. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <Link to="/terms" className="transition-colors hover:text-foreground">

@@ -68,7 +68,7 @@
 }
 
 .dark {
-  /* Dark theme — the original ScreenMint aesthetic */
+  /* Dark theme — the original Screenify aesthetic */
   --background: oklch(0.16 0.012 95);
   --foreground: oklch(0.96 0.02 95);
   --ink: oklch(0.12 0.01 95);
