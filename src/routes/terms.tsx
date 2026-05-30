@@ -24,7 +24,7 @@ function TermsPage() {
     },
     {
       title: "5. Payment and Refunds",
-      content: `Screenify charges a one-time fee per generation to unlock and download full-resolution promo images. All payments are processed securely via Lemon Squeezy. Due to the digital nature of the product, all sales are final once the images have been generated and unlocked. If you experience technical issues, please contact us at hello@screenmint.app.`,
+      content: `Screenify charges a one-time fee per generation to unlock and download full-resolution promo images. All payments are processed securely via Lemon Squeezy. Due to the digital nature of the product, all sales are final once the images have been generated and unlocked. If you experience technical issues, please contact us at Screenify786@gmail.com.`,
     },
     {
       title: "6. User Content",
@@ -64,7 +64,7 @@ function TermsPage() {
     },
     {
       title: "15. Contact Us",
-      content: `If you have any questions about these Terms, please contact us at hello@screenmint.app.`,
+      content: `If you have any questions about these Terms, please contact us at Screenify786@gmail.com.`,
     },
   ];
 
@@ -116,10 +116,10 @@ function TermsPage() {
           <p className="text-sm text-muted-foreground">
             Questions about these terms? Reach out at{" "}
             <a
-              href="mailto:hello@screenmint.app"
+              href="mailto:Screenify786@gmail.com"
               className="text-foreground underline underline-offset-4 transition hover:text-lime"
             >
-              hello@screenmint.app
+              Screenify786@gmail.com
             </a>
           </p>
         </div>

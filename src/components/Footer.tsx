@@ -84,7 +84,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@screenmint.app"
+                  href="mailto:Screenify786@gmail.com"
                   className="transition-colors hover:text-foreground"
                 >
                   Support
@@ -144,7 +144,7 @@ export function Footer() {
               Terms & Conditions
             </Link>
             <span className="text-border">|</span>
-            <a href="mailto:hello@screenmint.app" className="transition-colors hover:text-foreground">
+            <a href="mailto:Screenify786@gmail.com" className="transition-colors hover:text-foreground">
               Contact
             </a>
           </div>
