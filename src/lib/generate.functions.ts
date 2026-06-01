@@ -2,37 +2,54 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
+const OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations";
+
+// Latest high-quality text model optimized for content creation (supports vision).
+const TEXT_MODEL = "gpt-4o";
+// OpenAI's highest-quality image generation model.
+const IMAGE_MODEL = "gpt-image-1";
 
 function getKey(): string {
-  const key = process.env.LOVABLE_API_KEY;
-  if (!key) throw new Error("LOVABLE_API_KEY is not configured.");
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error("OPENAI_API_KEY is not configured.");
   return key;
 }
 
+function mapError(status: number, text: string): Error {
+  if (status === 401) return new Error("Invalid OpenAI API key. Please check the configured key.");
+  if (status === 429) return new Error("Rate limit hit. Please retry shortly.");
+  if (status === 402 || status === 403)
+    return new Error("OpenAI quota exhausted or access denied. Check your OpenAI billing.");
+  return new Error(`OpenAI error ${status}: ${text.slice(0, 300)}`);
+}
+
 async function chat(body: Record<string, unknown>): Promise<any> {
-  const res = await fetch(GATEWAY_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${getKey()}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(OPENAI_CHAT_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getKey()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (err) {
+    throw new Error(`Network error contacting OpenAI: ${err instanceof Error ? err.message : "unknown"}`);
+  }
   if (!res.ok) {
     const text = await res.text();
-    if (res.status === 429) throw new Error("Rate limit hit. Please retry shortly.");
-    if (res.status === 402) throw new Error("AI credits exhausted. Add funds in Workspace settings.");
-    throw new Error(`AI gateway error ${res.status}: ${text.slice(0, 300)}`);
+    throw mapError(res.status, text);
   }
   return res.json();
 }
 
-// ─── Vision analysis (Gemini flash) ──────────────────────────────────────────
+// ─── Vision analysis (OpenAI gpt-4o) ─────────────────────────────────────────
 
 async function analyzeImage(prompt: string, imageDataUrl: string): Promise<string> {
   const data = await chat({
-    model: "google/gemini-2.5-flash",
+    model: TEXT_MODEL,
     messages: [
       {
         role: "user",
@@ -46,17 +63,36 @@ async function analyzeImage(prompt: string, imageDataUrl: string): Promise<strin
   return data?.choices?.[0]?.message?.content ?? "";
 }
 
-// ─── Image generation (Nano Banana) ──────────────────────────────────────────
+// ─── Image generation (OpenAI gpt-image-1) ───────────────────────────────────
 
 async function generateImage(prompt: string): Promise<string> {
-  const data = await chat({
-    model: "google/gemini-2.5-flash-image",
-    messages: [{ role: "user", content: prompt }],
-    modalities: ["image", "text"],
-  });
-  const url = data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-  if (!url) throw new Error("Image generation returned no image.");
-  return url;
+  let res: Response;
+  try {
+    res = await fetch(OPENAI_IMAGE_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getKey()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: IMAGE_MODEL,
+        prompt,
+        n: 1,
+        size: "1536x1024",
+        quality: "high",
+      }),
+    });
+  } catch (err) {
+    throw new Error(`Network error contacting OpenAI: ${err instanceof Error ? err.message : "unknown"}`);
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    throw mapError(res.status, text);
+  }
+  const data = await res.json();
+  const b64 = data?.data?.[0]?.b64_json;
+  if (!b64) throw new Error("Image generation returned no image.");
+  return `data:image/png;base64,${b64}`;
 }
 
 // ─── Types ───────────────────────────────────────────────────────────────────
