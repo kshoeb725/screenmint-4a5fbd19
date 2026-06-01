@@ -21,10 +21,6 @@ export function Footer() {
               AI-powered Shopify App Store promo image generator. Upload one screenshot, get three
               polished, store-ready images in seconds.
             </p>
-            <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-lime" />
-              AI live & ready
-            </div>
           </div>
 
           {/* About */}
