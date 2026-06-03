@@ -192,7 +192,8 @@ async function renderShot(
 
   const fullPrompt =
     `${imagePrompt}. ` +
-    `Composition: 1600x1200px, 4:3 aspect ratio, professional Shopify App Store promotional image. ` +
+    `Composition: 16:9 aspect ratio (1920x1080), professional Shopify App Store promotional screenshot. ` +
+    `Stay visually consistent with the uploaded app screenshot, preserving its colors, branding, and design context. ` +
     `Background color: ${bg}, palette: ${paletteList}, style: ${backgroundStyle || "clean modern"}. ` +
     `Overlay headline text: "${headline}". Supporting text: "${subhead}". ` +
     `Accent color: ${accent}. Ultra high quality, professional marketing graphic, no watermarks, no lorem ipsum.`;
