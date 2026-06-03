@@ -114,7 +114,7 @@ type AnalysisPlan = {
   appName: string;
   category: string;
   primaryBenefit: string;
-  shots: { headline: string; subhead: string; caption: string; imagePrompt: string }[];
+  shots: { headline: string; subhead: string; imagePrompt: string }[];
 };
 
 function extractJSON(raw: string): string {
