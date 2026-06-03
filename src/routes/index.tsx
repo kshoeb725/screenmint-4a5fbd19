@@ -670,19 +670,19 @@ function ShotCard({
           <button
             type="button"
             onClick={() => setFullscreen(false)}
-            className="absolute top-4 right-4 font-mono text-xs tracking-widest bg-cream/10 hover:bg-cream/20 text-cream px-3 py-2 rounded-full transition"
+            className="absolute top-4 right-4 z-10 font-mono text-xs tracking-widest bg-cream/10 hover:bg-cream/20 text-cream px-3 py-2 rounded-full transition"
             aria-label="Close fullscreen"
           >
             ✕ CLOSE
           </button>
           <div
-            className="relative max-w-6xl w-full"
+            className="relative inline-block"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={shot.image}
               alt={shot.headline}
-              className="w-full h-auto max-h-[85vh] object-contain rounded-lg select-none pointer-events-none mx-auto"
+              className="block max-w-[92vw] max-h-[85vh] w-auto h-auto object-contain rounded-lg select-none pointer-events-none"
               draggable={false}
             />
             <Watermark />
