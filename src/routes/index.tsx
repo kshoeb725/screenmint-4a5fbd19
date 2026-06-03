@@ -422,7 +422,7 @@ function Loading({ preview }: { preview: string | null }) {
   const steps = [
     "Reading your screenshot",
     "Identifying app purpose",
-    "Planning 3 promo concepts",
+    "Planning your promo concept",
     "Rendering store-ready images",
   ];
   return (
