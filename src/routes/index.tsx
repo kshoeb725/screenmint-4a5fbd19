@@ -506,17 +506,17 @@ function Results({
           {paid ? (
             <>
               <p className="font-mono text-xs uppercase tracking-widest text-lime mb-1">Unlocked</p>
-              <p className="font-display text-2xl">Your promos are ready.</p>
+              <p className="font-display text-2xl">Your promo is ready.</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Download all 3 images as a ZIP archive at full resolution.
+                Download your image at full resolution.
               </p>
             </>
           ) : (
             <>
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1">Preview only</p>
-              <p className="font-display text-2xl">Remove watermarks · Download ZIP</p>
+              <p className="font-display text-2xl">Remove watermark · Download image</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Pay once to download all 3 high-res images without watermarks.
+                Pay once to download your high-res image without watermark.
               </p>
             </>
           )}
