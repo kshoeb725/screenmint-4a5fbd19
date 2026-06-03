@@ -144,7 +144,7 @@ async function analyze(
 ): Promise<AnalysisPlan> {
   const paletteLine = ctx.palette.length ? ctx.palette.join(", ") : "vibrant brand colors";
 
-  const prompt = `You are a Shopify App Store marketing expert. Analyze this screenshot of a Shopify merchant app and create a marketing plan for 3 promotional images.
+  const prompt = `You are a Shopify App Store marketing expert. Analyze this screenshot of a Shopify merchant app and create a marketing plan for 1 promotional image. The image MUST be based on and visually consistent with the uploaded screenshot, preserving its colors, branding, and design context.
 
 App details (ground truth):
 - App name: ${ctx.appName}
@@ -159,9 +159,7 @@ Return ONLY valid JSON (no markdown, no prose) with this exact shape:
   "category": "one-word Shopify app category",
   "primaryBenefit": "compelling 8-12 word benefit statement",
   "shots": [
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "detailed text-to-image prompt for a Shopify App Store hero promo image, 1600x1200, 4:3, device mockup of ${ctx.appName} with the headline overlay, palette ${paletteLine}, ${ctx.backgroundStyle || "clean modern"} background" },
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "feature-callout promo for ${ctx.appName}, annotation pills, palette ${paletteLine}" },
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "social-proof/results promo for ${ctx.appName} with a big stat card and merchant testimonial, palette ${paletteLine}" }
+    { "headline": "...", "subhead": "...", "imagePrompt": "detailed text-to-image prompt for a Shopify App Store hero promo image, 16:9 aspect ratio, device mockup of ${ctx.appName} based on the uploaded screenshot with the headline overlay, palette ${paletteLine}, ${ctx.backgroundStyle || "clean modern"} background" }
   ]
 }`;
 
