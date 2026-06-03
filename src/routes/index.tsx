@@ -300,7 +300,7 @@ function Hero({ onPick, onDrop }: { onPick: () => void; onDrop: (f: File) => voi
         {[
           { n: "01", t: "Upload", d: "One screenshot. That's the entire input." },
           { n: "02", t: "Analyze", d: "AI reads layout, purpose, and key UI." },
-          { n: "03", t: "Generate", d: `3 promo images + captions · Pay ${PRICE_DISPLAY} to download.` },
+          { n: "03", t: "Generate", d: `1 promo image · Pay ${PRICE_DISPLAY} to download.` },
         ].map((s) => (
           <div key={s.n} className="bg-card p-7">
             <div className="font-mono text-xs text-lime mb-3">{s.n}</div>
