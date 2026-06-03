@@ -494,7 +494,7 @@ function Results({
         </button>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid gap-6 max-w-3xl">
         {result.shots.map((shot, i) => (
           <ShotCard key={i} index={i} shot={shot} paid={paid} />
         ))}
