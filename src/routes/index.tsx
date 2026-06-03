@@ -257,11 +257,11 @@ function Hero({ onPick, onDrop }: { onPick: () => void; onDrop: (f: File) => voi
       <h1 className="mt-4 font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight text-balance">
         One screenshot.
         <br />
-        <span className="italic text-lime">Three</span> store-ready promos.
+        <span className="italic text-lime">One</span> store-ready promo.
       </h1>
       <p className="mt-6 max-w-xl text-lg text-muted-foreground text-balance">
-        Drop a single screenshot of your Shopify app. Get 3 polished App Store images with marketing
-        captions in under a minute. No designer, no Figma, no settings.
+        Drop a single screenshot of your Shopify app. Get a polished App Store image in under a
+        minute. No designer, no Figma, no settings.
       </p>
 
       <div
