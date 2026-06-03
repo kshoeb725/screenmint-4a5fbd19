@@ -225,7 +225,6 @@ export const generatePromos = createServerFn({ method: "POST" })
     const shots = plan.shots.map((s, i) => ({
       headline: s.headline,
       subhead: s.subhead,
-      caption: s.caption,
       image: typeof images[i] === "string" ? (images[i] as string) : null,
       error: typeof images[i] === "string" ? null : (images[i] as { error: string }).error,
     }));
