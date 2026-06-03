@@ -140,7 +140,7 @@ function Index() {
       setResult(res);
       setPaid(false);
       setStatus("done");
-      toast.success("3 promo shots ready — preview below.");
+      toast.success("Your promo image is ready — preview below.");
     } catch (e) {
       setStatus("preview");
       toast.error(e instanceof Error ? e.message : "Generation failed");
@@ -257,11 +257,11 @@ function Hero({ onPick, onDrop }: { onPick: () => void; onDrop: (f: File) => voi
       <h1 className="mt-4 font-display text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tight text-balance">
         One screenshot.
         <br />
-        <span className="italic text-lime">Three</span> store-ready promos.
+        <span className="italic text-lime">One</span> store-ready promo.
       </h1>
       <p className="mt-6 max-w-xl text-lg text-muted-foreground text-balance">
-        Drop a single screenshot of your Shopify app. Get 3 polished App Store images with marketing
-        captions in under a minute. No designer, no Figma, no settings.
+        Drop a single screenshot of your Shopify app. Get a polished App Store image in under a
+        minute. No designer, no Figma, no settings.
       </p>
 
       <div
@@ -300,7 +300,7 @@ function Hero({ onPick, onDrop }: { onPick: () => void; onDrop: (f: File) => voi
         {[
           { n: "01", t: "Upload", d: "One screenshot. That's the entire input." },
           { n: "02", t: "Analyze", d: "AI reads layout, purpose, and key UI." },
-          { n: "03", t: "Generate", d: `3 promo images + captions · Pay ${PRICE_DISPLAY} to download.` },
+          { n: "03", t: "Generate", d: `1 promo image · Pay ${PRICE_DISPLAY} to download.` },
         ].map((s) => (
           <div key={s.n} className="bg-card p-7">
             <div className="font-mono text-xs text-lime mb-3">{s.n}</div>
@@ -402,7 +402,7 @@ function Preview({
             onClick={onGenerate}
             className="inline-flex items-center gap-2 rounded-full bg-lime text-ink font-semibold px-8 py-3.5 text-base hover:opacity-90 transition lime-glow"
           >
-            Generate 3 promos
+            Generate promo
             <span className="font-mono text-xs opacity-70">↵</span>
           </button>
           <button
@@ -422,7 +422,7 @@ function Loading({ preview }: { preview: string | null }) {
   const steps = [
     "Reading your screenshot",
     "Identifying app purpose",
-    "Planning 3 promo concepts",
+    "Planning your promo concept",
     "Rendering store-ready images",
   ];
   return (
@@ -494,7 +494,7 @@ function Results({
         </button>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid gap-6 max-w-3xl">
         {result.shots.map((shot, i) => (
           <ShotCard key={i} index={i} shot={shot} paid={paid} />
         ))}
@@ -506,17 +506,17 @@ function Results({
           {paid ? (
             <>
               <p className="font-mono text-xs uppercase tracking-widest text-lime mb-1">Unlocked</p>
-              <p className="font-display text-2xl">Your promos are ready.</p>
+              <p className="font-display text-2xl">Your promo is ready.</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Download all 3 images as a ZIP archive at full resolution.
+                Download your image at full resolution.
               </p>
             </>
           ) : (
             <>
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1">Preview only</p>
-              <p className="font-display text-2xl">Remove watermarks · Download ZIP</p>
+              <p className="font-display text-2xl">Remove watermark · Download image</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Pay once to download all 3 high-res images without watermarks.
+                Pay once to download your high-res image without watermark.
               </p>
             </>
           )}
@@ -586,10 +586,6 @@ function ShotCard({
 }) {
   const [fullscreen, setFullscreen] = useState(false);
 
-  const copyCaption = async () => {
-    await navigator.clipboard.writeText(shot.caption);
-    toast.success("Caption copied");
-  };
 
   const Watermark = () =>
     !paid ? (
@@ -624,7 +620,7 @@ function ShotCard({
 
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="relative aspect-[4/3] bg-muted overflow-hidden">
+      <div className="relative aspect-video bg-muted overflow-hidden">
         {shot.image ? (
           <>
             <img
@@ -674,19 +670,19 @@ function ShotCard({
           <button
             type="button"
             onClick={() => setFullscreen(false)}
-            className="absolute top-4 right-4 font-mono text-xs tracking-widest bg-cream/10 hover:bg-cream/20 text-cream px-3 py-2 rounded-full transition"
+            className="absolute top-4 right-4 z-10 font-mono text-xs tracking-widest bg-cream/10 hover:bg-cream/20 text-cream px-3 py-2 rounded-full transition"
             aria-label="Close fullscreen"
           >
             ✕ CLOSE
           </button>
           <div
-            className="relative max-w-6xl w-full"
+            className="relative inline-block"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={shot.image}
               alt={shot.headline}
-              className="w-full h-auto max-h-[85vh] object-contain rounded-lg select-none pointer-events-none mx-auto"
+              className="block max-w-[92vw] max-h-[85vh] w-auto h-auto object-contain rounded-lg select-none pointer-events-none"
               draggable={false}
             />
             <Watermark />
@@ -696,19 +692,8 @@ function ShotCard({
       <div className="p-5 flex flex-col gap-3 flex-1">
         <h3 className="font-display text-2xl leading-tight">{shot.headline}</h3>
         <p className="text-sm text-muted-foreground">{shot.subhead}</p>
-        <div className="mt-2 rounded-lg bg-background border border-border p-3">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-lime mb-1">Caption</p>
-          <p className="text-sm">{shot.caption}</p>
-        </div>
-        <div className="mt-auto flex gap-2 pt-2">
-          <button
-            onClick={copyCaption}
-            className="flex-1 rounded-full border border-border px-4 py-2.5 text-sm hover:bg-background transition font-mono text-xs"
-          >
-            Copy caption
-          </button>
-        </div>
       </div>
+
     </article>
   );
 }

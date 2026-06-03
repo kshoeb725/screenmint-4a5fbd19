@@ -114,7 +114,7 @@ type AnalysisPlan = {
   appName: string;
   category: string;
   primaryBenefit: string;
-  shots: { headline: string; subhead: string; caption: string; imagePrompt: string }[];
+  shots: { headline: string; subhead: string; imagePrompt: string }[];
 };
 
 function extractJSON(raw: string): string {
@@ -144,7 +144,7 @@ async function analyze(
 ): Promise<AnalysisPlan> {
   const paletteLine = ctx.palette.length ? ctx.palette.join(", ") : "vibrant brand colors";
 
-  const prompt = `You are a Shopify App Store marketing expert. Analyze this screenshot of a Shopify merchant app and create a marketing plan for 3 promotional images.
+  const prompt = `You are a Shopify App Store marketing expert. Analyze this screenshot of a Shopify merchant app and create a marketing plan for 1 promotional image. The image MUST be based on and visually consistent with the uploaded screenshot, preserving its colors, branding, and design context.
 
 App details (ground truth):
 - App name: ${ctx.appName}
@@ -159,9 +159,7 @@ Return ONLY valid JSON (no markdown, no prose) with this exact shape:
   "category": "one-word Shopify app category",
   "primaryBenefit": "compelling 8-12 word benefit statement",
   "shots": [
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "detailed text-to-image prompt for a Shopify App Store hero promo image, 1600x1200, 4:3, device mockup of ${ctx.appName} with the headline overlay, palette ${paletteLine}, ${ctx.backgroundStyle || "clean modern"} background" },
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "feature-callout promo for ${ctx.appName}, annotation pills, palette ${paletteLine}" },
-    { "headline": "...", "subhead": "...", "caption": "...", "imagePrompt": "social-proof/results promo for ${ctx.appName} with a big stat card and merchant testimonial, palette ${paletteLine}" }
+    { "headline": "...", "subhead": "...", "imagePrompt": "detailed text-to-image prompt for a Shopify App Store hero promo image, 16:9 aspect ratio, device mockup of ${ctx.appName} based on the uploaded screenshot with the headline overlay, palette ${paletteLine}, ${ctx.backgroundStyle || "clean modern"} background" }
   ]
 }`;
 
@@ -174,8 +172,8 @@ Return ONLY valid JSON (no markdown, no prose) with this exact shape:
     console.error("Malformed plan JSON. Raw:", raw.slice(0, 800));
     throw new Error("AI returned malformed plan. Please retry.");
   }
-  if (!parsed?.shots || parsed.shots.length < 3) throw new Error("AI did not return 3 shots.");
-  parsed.shots = parsed.shots.slice(0, 3);
+  if (!parsed?.shots || parsed.shots.length < 1) throw new Error("AI did not return an image plan.");
+  parsed.shots = parsed.shots.slice(0, 1);
   return parsed;
 }
 
@@ -194,7 +192,8 @@ async function renderShot(
 
   const fullPrompt =
     `${imagePrompt}. ` +
-    `Composition: 1600x1200px, 4:3 aspect ratio, professional Shopify App Store promotional image. ` +
+    `Composition: 16:9 aspect ratio (1920x1080), professional Shopify App Store promotional screenshot. ` +
+    `Stay visually consistent with the uploaded app screenshot, preserving its colors, branding, and design context. ` +
     `Background color: ${bg}, palette: ${paletteList}, style: ${backgroundStyle || "clean modern"}. ` +
     `Overlay headline text: "${headline}". Supporting text: "${subhead}". ` +
     `Accent color: ${accent}. Ultra high quality, professional marketing graphic, no watermarks, no lorem ipsum.`;
@@ -226,7 +225,6 @@ export const generatePromos = createServerFn({ method: "POST" })
     const shots = plan.shots.map((s, i) => ({
       headline: s.headline,
       subhead: s.subhead,
-      caption: s.caption,
       image: typeof images[i] === "string" ? (images[i] as string) : null,
       error: typeof images[i] === "string" ? null : (images[i] as { error: string }).error,
     }));
