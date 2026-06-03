@@ -620,7 +620,7 @@ function ShotCard({
 
   return (
     <article className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="relative aspect-[4/3] bg-muted overflow-hidden">
+      <div className="relative aspect-video bg-muted overflow-hidden">
         {shot.image ? (
           <>
             <img
