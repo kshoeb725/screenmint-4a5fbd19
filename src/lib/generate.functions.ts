@@ -172,8 +172,8 @@ Return ONLY valid JSON (no markdown, no prose) with this exact shape:
     console.error("Malformed plan JSON. Raw:", raw.slice(0, 800));
     throw new Error("AI returned malformed plan. Please retry.");
   }
-  if (!parsed?.shots || parsed.shots.length < 3) throw new Error("AI did not return 3 shots.");
-  parsed.shots = parsed.shots.slice(0, 3);
+  if (!parsed?.shots || parsed.shots.length < 1) throw new Error("AI did not return an image plan.");
+  parsed.shots = parsed.shots.slice(0, 1);
   return parsed;
 }
 
