@@ -140,7 +140,7 @@ function Index() {
       setResult(res);
       setPaid(false);
       setStatus("done");
-      toast.success("3 promo shots ready — preview below.");
+      toast.success("Your promo image is ready — preview below.");
     } catch (e) {
       setStatus("preview");
       toast.error(e instanceof Error ? e.message : "Generation failed");
