@@ -586,10 +586,6 @@ function ShotCard({
 }) {
   const [fullscreen, setFullscreen] = useState(false);
 
-  const copyCaption = async () => {
-    await navigator.clipboard.writeText(shot.caption);
-    toast.success("Caption copied");
-  };
 
   const Watermark = () =>
     !paid ? (
