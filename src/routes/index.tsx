@@ -402,7 +402,7 @@ function Preview({
             onClick={onGenerate}
             className="inline-flex items-center gap-2 rounded-full bg-lime text-ink font-semibold px-8 py-3.5 text-base hover:opacity-90 transition lime-glow"
           >
-            Generate 3 promos
+            Generate promo
             <span className="font-mono text-xs opacity-70">↵</span>
           </button>
           <button
