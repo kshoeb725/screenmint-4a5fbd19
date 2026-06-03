@@ -692,19 +692,8 @@ function ShotCard({
       <div className="p-5 flex flex-col gap-3 flex-1">
         <h3 className="font-display text-2xl leading-tight">{shot.headline}</h3>
         <p className="text-sm text-muted-foreground">{shot.subhead}</p>
-        <div className="mt-2 rounded-lg bg-background border border-border p-3">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-lime mb-1">Caption</p>
-          <p className="text-sm">{shot.caption}</p>
-        </div>
-        <div className="mt-auto flex gap-2 pt-2">
-          <button
-            onClick={copyCaption}
-            className="flex-1 rounded-full border border-border px-4 py-2.5 text-sm hover:bg-background transition font-mono text-xs"
-          >
-            Copy caption
-          </button>
-        </div>
       </div>
+
     </article>
   );
 }
